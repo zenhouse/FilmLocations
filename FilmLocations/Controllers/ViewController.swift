@@ -15,21 +15,43 @@ class ViewController: UIViewController {
     var films = [Film]()
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        let parser = JSONParser.shared
-        let data = parser.getDataFromFile()
-        if let arry = parser.filmList(data) {
-            self.films = arry
-            print("total records: \(arry.count)\n\n\n")
-//            for film in arry {
-//                print("\(film.filmInfo)\n\n\(film.moreInfo.facts)\n\n\(film.moreInfo.locations)\n\n\n\n")
-//            }
-           
-        }
+        
+        updateList()
+
     }
 
-
+    
+    
+    // Mark: - updateList()
+    func updateList() {
+        let query = QueryService()
+        let network = NetworkService()
+        guard let URL = query.getURLForPath() else {return}
+        network.dataForURL(URL) { data, error in
+            guard error.isEmpty else {
+                print("Search error: " + error)
+                return
+            }
+            
+            // extract film list from JSON Data
+            DispatchQueue.global().async { [unowned self] in
+                if let data = data {
+                    let parser = JSONParser.shared
+                    if let films = parser.filmList(data) {
+                        DispatchQueue.main.async {
+                            self.films = films
+                            self.tableView.reloadData()
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
+
+
+
+
 
 // MARK: - Datasource, Delegate functions
 extension ViewController : UITableViewDataSource, UITableViewDelegate {

@@ -18,8 +18,8 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var director: UILabel!
     
     var film: Film?
-    let initLocation = CLLocation(latitude: 37.773972, longitude: -122.431297)
-    let regionRadius: CLLocationDistance = 3_500
+    private let initLocation = CLLocation(latitude: 37.773972, longitude: -122.431297)
+    private let regionRadius: CLLocationDistance = 8_500
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,7 +30,7 @@ class DetailViewController: UIViewController {
         addMapLocations()
     }
     
-    func updateLabels() {
+    private func updateLabels() {
         if let thisFilm = film {
             self.filmTitle.text = thisFilm.filmInfo.title
             self.year.text = thisFilm.filmInfo.releaseYear
@@ -39,14 +39,14 @@ class DetailViewController: UIViewController {
         }
     }
     
-    func centerMapOnLocation(location: CLLocation) {
+    private func centerMapOnLocation(location: CLLocation) {
         let coordinateRegion = MKCoordinateRegion(center: location.coordinate,
                                                   latitudinalMeters: regionRadius,
                                                   longitudinalMeters: regionRadius)
         mapView.setRegion(coordinateRegion, animated: true)
     }
     
-    func addMapLocations() {
+    private func addMapLocations() {
         var mapItems = [MKAnnotation]()
         if let thisFilm = self.film {
             let locations = Array(thisFilm.moreInfo.locations.values)

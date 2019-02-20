@@ -9,12 +9,14 @@
 import Foundation
 
 final class JSONParser {
-    var filmDict = [String:Film]()
+    private var filmDict = [String:Film]()
     static let shared = JSONParser()
     init() {
         
     }
+    
     // extract our list from the JSON
+    // build dictionary aggregate same films
     func filmList(_ data: Data) -> [Film]? {
         filmDict.removeAll()
         if let filmInfoList = getList(data) {
@@ -23,7 +25,6 @@ final class JSONParser {
                 if filmDict[key] == nil {
                     filmDict[key] = Film(filmInfo)
                 } else {
-                    // append location
                     let location = Location(longitude: filmInfo.longitude,
                                             latitude: filmInfo.latitude,
                                             locName: filmInfo.location)
@@ -43,7 +44,6 @@ final class JSONParser {
     }
     
     private func getList(_ data: Data) -> [FilmInfo]? {
-      //  let films: [FilmInfo]
         do {
             let films = try JSONDecoder().decode([FilmInfo].self, from: data)
             return films
@@ -58,52 +58,4 @@ final class JSONParser {
         return filmDict.values.sorted(by: {$0.filmInfo.title < $1.filmInfo.title})
     }
     
-    func getDataFromFile() -> Data {
-        var data = Data()
-        if let path = Bundle.main.path(forResource: "mv", ofType: "json") {
-            do {
-                data = try Data(contentsOf: URL(fileURLWithPath: path), options: .alwaysMapped)
-            } catch let error {
-                print("Error occurrred retrieving JSON file: \(error.localizedDescription)")
-            }
-        } else {
-            print("Invalid file path.")
-        }
-
-        return data
-    }
-    
-    func getTestArry() -> [FilmInfo] {
-        var tmpFilms = [FilmInfo]()
-        if let path = Bundle.main.path(forResource: "mv", ofType: "json") {
-            do {
-                let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .alwaysMapped)
-                if let films = getList(data) {
-                    tmpFilms = films
-                }
-            } catch let error {
-                print("Error occurrred retrieving JSON file: \(error.localizedDescription)")
-            }
-        } else {
-            print("Invalid file path.")
-        }
-        
-        return tmpFilms
-    }
-    
-//    private func getTestArry() -> [FilmInfo] {
-//        var films = [FilmInfo]()
-//        if let path = Bundle.main.path(forResource: "mv", ofType: "json") {
-//            do {
-//                let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .alwaysMapped)
-//                films = try JSONDecoder().decode([FilmInfo].self, from: data)
-//            } catch let error {
-//                print("Error occurrred retrieving JSON file: \(error.localizedDescription)")
-//            }
-//        } else {
-//            print("Invalid file path.")
-//        }
-//
-//        return films
-//    }
 }

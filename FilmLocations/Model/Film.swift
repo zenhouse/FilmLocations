@@ -42,7 +42,7 @@ struct FilmInfo: Codable {
     let title: String
     let location: String
     let latitude: Double
-    let writers: [String]
+    var writers: [String]?
     let director: String
     let prodCompany: String
     var funFact: String?

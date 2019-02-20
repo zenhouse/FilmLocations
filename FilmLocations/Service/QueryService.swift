@@ -7,3 +7,19 @@
 //
 
 import Foundation
+final class QueryService {
+    
+    private let strPath = "http://assets.nflxext.com/ffe/siteui/iosui/filmData.json"
+    var errorMessage = ""
+
+    // Mark: - Film
+    func getURLForPath() -> URL? {
+        var queryURL : URL?
+        if let urlComponents = URLComponents(string: strPath) {
+            queryURL = urlComponents.url
+        } else {
+            print("Error occured with path: \(strPath)")
+        }
+        return queryURL
+    }
+}
