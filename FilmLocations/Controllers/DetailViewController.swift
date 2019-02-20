@@ -12,17 +12,31 @@ import MapKit
 class DetailViewController: UIViewController {
 
     @IBOutlet weak var mapView: MKMapView!
-
+    @IBOutlet weak var filmTitle: UILabel!
+    @IBOutlet weak var year: UILabel!
+    @IBOutlet weak var actors: UILabel!
+    @IBOutlet weak var director: UILabel!
+    
     var film: Film?
     let initLocation = CLLocation(latitude: 37.773972, longitude: -122.431297)
-    let regionRadius: CLLocationDistance = 7_500
+    let regionRadius: CLLocationDistance = 3_500
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         mapView.delegate = self
+        updateLabels()
         centerMapOnLocation(location: initLocation)
         addMapLocations()
+    }
+    
+    func updateLabels() {
+        if let thisFilm = film {
+            self.filmTitle.text = thisFilm.filmInfo.title
+            self.year.text = thisFilm.filmInfo.releaseYear
+            self.actors.text = thisFilm.filmInfo.actors.joined(separator: ", ")
+            self.director.text = thisFilm.filmInfo.director
+        }
     }
     
     func centerMapOnLocation(location: CLLocation) {
