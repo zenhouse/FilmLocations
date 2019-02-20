@@ -11,17 +11,14 @@ import UIKit
 class ViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
-    
     var films = [Film]()
+    
+    // Mark: - viewDidLoad()
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         updateList()
-
     }
 
-    
-    
     // Mark: - updateList()
     func updateList() {
         let query = QueryService()
@@ -48,9 +45,6 @@ class ViewController: UIViewController {
         }
     }
 }
-
-
-
 
 
 // MARK: - Datasource, Delegate functions
